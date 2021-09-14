@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.msh</groupId>
+    <artifactId>micronauthdemo</artifactId>
+    <version>0.1</version>
+    <packaging>${packaging}</packaging>
+
+    <parent>
+        <groupId>io.micronaut</groupId>
+        <artifactId>micronaut-parent</artifactId>
+        <version>3.0.0</version>
+    </parent>
+
+    <properties>
+        <packaging>jar</packaging>
+        <jdk.version>11</jdk.version>
+        <release.version>11</release.version>
+        <micronaut.version>3.0.0</micronaut.version>
+        <exec.mainClass>com.msh.Application</exec.mainClass>
+        <micronaut.runtime>jetty</micronaut.runtime>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.micronaut</groupId>
+            <artifactId>micronaut-inject</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.micronaut</groupId>
+            <artifactId>micronaut-validation</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.micronaut.test</groupId>
+            <artifactId>micronaut-test-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.micronaut</groupId>
+            <artifactId>micronaut-http-client</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.micronaut</groupId>
+            <artifactId>micronaut-runtime</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.micronaut.servlet</groupId>
+            <artifactId>micronaut-http-server-jetty</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.micronaut.build</groupId>
+                <artifactId>micronaut-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <!-- Uncomment to enable incremental compilation -->
+                    <!-- <useIncrementalCompilation>false</useIncrementalCompilation> -->
+
+                    <annotationProcessorPaths combine.children="append">
+                        <path>
+                            <groupId>io.micronaut</groupId>
+                            <artifactId>micronaut-http-validation</artifactId>
+                            <version>${micronaut.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                    <compilerArgs>
+                        <arg>-Amicronaut.processing.group=com.msh</arg>
+                        <arg>-Amicronaut.processing.module=micronauthdemo</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.1.4</version>
+                <configuration>
+                    <!--<to>
+                        <image>docker.io/khalid31/micronaut-demo:latest</image>
+                    </to>-->
+                    <to>
+                        <image>public.ecr.aws/k5j0w6q1/micronaut:latest</image>
+                        <auth>
+                          <!--  <username>AWS</username>
+                            <password>eyJwYXlsb2FkIjoiVnhCQVZRQUlnQkdWcFk2TloyVVgySVpnSXVVY0JBUktQSktRc1pXcklMZEtIa1NOVUNGK3dvYnVTRFhKL29jNDc3M0hzUDNwbDJITkZsdDdLTzI0ME5PWmxFMDhONmljN0VaL1BWekFCdS9oKzlSaHdCUENERzlsMDZIR1JWaWJoSEZJS2RFSkJ0anA4ZGNrQkFLbHZOSTVjYW16M0pqa2tvRW80MEQ2QWpXSXJQb2l3a3A2Z2tlQVZNVmVxeDNQcWJ6QTd2c1JKOE9uN2dVclFRUHk1S2V6VXRnbmkxcURKcGtWMGpOcTJ5dFdLUnZrY0Y1UXFvdGswM2Y3OUNVY3pKQmZyNzNpZUZXb3FFVS9vTzhpUk1pZU5DU1lCK3l3ck96QTdRb3ArVGpoc0tTYWxTekVNQVRuaEh0ekFmS3RNNFZPdDFad1RqdmlTYlNtMks5aGNqdXJ2SWoyVi9WQUZ2Qkk4c1dNZE00Tk10eE5mcWNjVnRCUFJ6WUhyMHdjaHZNMjdLYyt2d2wzZVl1NXJkL0RaV1E0L0c5dVZEbHJXRDU2bHVwanpjdXFVdW0yMGpRRVdmRVhRSk80dTN4S0ZIZ2M0UkxLNXdESnhFYjRjenlsKzV6TGkwWWp2MkNZZ0FPRktXRkI1cExzc0hoeEFVRDlFYzZRU1pickJORXVQaVRuTWhpWXgzZzNtbWV5SFRBdnpLYnhWSmJ2UzArbCtTTVRXbm1adWFYQ2hMVWFEb1JraVRHbmJFQ0xMbUlzbExtVEN4MlZUZkZXQ1NlWUhraHQrZjRTVTVydHU3Z2hrMU44NmRBY3RNQVRUb0tuaUFGOXhFQ1ZrSXl6akJQWENuK3VjanJVeWVnSWpkSzNadFZMTVNmb2dmSko1TXBlRHVQd2dqWk9mdlM2dFd3b0gzOVRkUFNVUFlrZi9sbWFZOXZwb21ZSGUzaFVSSkpVMkR3TjVDRmJpcTExR1B2K2lBQlRYazBzeHJwYVk3S2IxTEM1aTRTd0NBSkE4QUc5QTFlQkdDc2hUZVo3V09RZHlNMzY3Z1BEbmN6Y0NDaHRBelE5dVF4RFNYUFlQcGM3NDZ1eUprbTY0aVhMN0F2WDVSVThkbHdINVlsaU84UmNENzE1OXpFQTRSQ0EvQ3BqR2d4Y3YrSDhYeEkrdW1TR2xNTEQ4cGVqL1BIZkVVbnpwS2xZQTJNaHBDQ3liTCthTkVWZHA4cmFwcjJLK3J3eENRUmlaeG5MWW5BVndlR28xNzhZSENGQ3hCQ3dWNkhkRmllcUNzSFN4L0xkTEpTVkRGNXU3TVNWZXkrcGU1RDVuUEZ3Z0Z2NWZ3bCtZTnJLT0lYYkx2dHJyMHF3aVlDUkpCWURRaStwNkNlcDNyaFNUWkdHYlRvK2twbUtSbXIwdHRKSGJ2UDR2dHRFT2xJb3ZqTHNaUHB6eVBYV3VOT3BKck09IiwiZGF0YWtleSI6IkFRSUJBSGlYdldPamxweXJyK0R2SFp3SW11UkgvNWNOL2g5d1RibHY2K3p4MUt3aVhRRWt0cDNtK3lVc1ZNcXBUWml3LzJGeUFBQUFmakI4QmdrcWhraUc5dzBCQndhZ2J6QnRBZ0VBTUdnR0NTcUdTSWIzRFFFSEFUQWVCZ2xnaGtnQlpRTUVBUzR3RVFRTVhzelNxc240a2JNSlpISkpBZ0VRZ0R1OVk5STlra3JSUVdmSllOOWM4bEg5N2gyc1hucXh2UEUwVDJEdDlqTlorYnhmVC9wdmFONSt6UDRkTE1MRzFLYTFyVmF5Nk9IVzFmY3ZFUT09IiwidmVyc2lvbiI6IjIiLCJ0eXBlIjoiREFUQV9LRVkiLCJleHBpcmF0aW9uIjoxNjMwNDI5NzU5fQ==</password>
+-->                        </auth>
+                    </to>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
